@@ -1,0 +1,33 @@
+from tokenizers import ByteLevelBPETokenizer, SentencePieceBPETokenizer
+from tokenizers.implementations import ByteLevelBPETokenizer, SentencePieceBPETokenizer
+from tokenizers.processors import BertProcessing
+
+with open("wiki.train.tokens", "r") as f:
+  text = f.read()
+byte = ByteLevelBPETokenizer()
+byte.train(files=["wiki.train.tokens"], vocab_size = 8000, min_frequency = 2, special_tokens = [
+    "<s>",
+    "<pad>",
+    "</s>",
+    "<unk>",
+    "<mask>",
+    ])
+sentence = SentencePieceBPETokenizer()
+sentence.train(files = ["wiki.train.tokens"], vocab_size = 8000, min_frequency = 2, special_tokens = [
+    "<s>",
+    "<pad>",
+    "</s>",
+    "<unk>",
+    "<mask>",
+    ])
+s1 = "I am learning about word tokenizers. They are not very complicated, and they are a good way to convert natural text into tokens."
+bpe1 = byte.encode(s1)
+sp1 = sentence.encode(s1)
+print("BPE tokens:", bpe1.tokens)
+print("SentencePiece tokens", sp1.tokens)
+
+s2 = "I already took some of the cs courses but 441 is the first one for ML"
+bpe2 = byte.encode(s2)
+sp2 = sentence.encode(s2)
+print("BPE tokens:", bpe2.tokens)
+print("SentencePiece tokens", sp2.tokens)
